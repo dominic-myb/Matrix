@@ -1,5 +1,5 @@
 <?php
-    include("connection.php");
+include("connection.php");
 // Retrieve the hashed password from the AJAX request
 $hashedPassword = $_POST['hashedPassword'];
 
@@ -14,5 +14,4 @@ if ($conn->query($sql) === TRUE) {
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
-
 ?>
