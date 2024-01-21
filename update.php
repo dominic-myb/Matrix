@@ -1,23 +1,9 @@
 <?php
-    include "connection.php";
+    include ("connection.php");
     $id = $_GET['updateid'];
     $query = "SELECT * FROM user_tbl WHERE id='$id'";
     $result = $conn->query($query);
     $row = mysqli_fetch_array($result);
-
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $department =$_POST['department'];
-        $sql = "UPDATE user_tbl SET username='$username', password='$password', department='$department' WHERE id='$id'";
-        if($conn->query($sql) === TRUE){
-            echo "<script>
-            alert ('Update Successfully!')
-            window.location = 'index.php'
-            </script>";
-        }
-        //add here the func for ecryption && the dep
-    }
 ?>
 
 
@@ -90,21 +76,24 @@
 
         <h2>Update Form</h2>
         
-        <form method="POST">
+        <form id="update-form">
+            <div class="form-group">
+                <input type="hidden" id="id" name="updateid" value="<?php echo $row['id'] ?>">
+            </div>
 
             <div class="form-group">
                 <label>Username:</label>
-                <input type="text" id="text" name="username" value="<?php echo $row['username']?>" autocomplete="off">
+                <input type="text" id="username" name="username" value="<?php echo $row['username']?>" autocomplete="off">
             </div>
             
             <div class="form-group">
                 <label>Password:</label>
-                <input type="password" id="text" name="password" value="<?php echo $row['password']?>" autocomplete="off">
+                <input type="password" id="password" name="password" value="<?php echo $row['password']?>" autocomplete="off">
             </div>
             
             <div class="form-group">
                 <label>Department:</label>
-                <select id="choices" name="department">
+                <select id="department" name="department">
                 <option value="DCS" <?php echo ($row['department'] == 'DCS') ? 'selected' : ''; ?>>DCS</option>
                 <option value="DTE" <?php echo ($row['department'] == 'DTE') ? 'selected' : ''; ?>>DTE</option>
                 <option value="DEE" <?php echo ($row['department'] == 'DEE') ? 'selected' : ''; ?>>DEE</option>
@@ -112,9 +101,11 @@
             </div>
 
             <br>
-
-            <input id="text" type="submit" value="UPDATE" class="btn btn-dark">
+            
+            <input id="update" type="submit" value="UPDATE" class="btn btn-dark" onclick="updateData()">
         </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>

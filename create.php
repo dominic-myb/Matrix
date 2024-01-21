@@ -95,7 +95,7 @@ include("connection.php");
             </div>
             <br>
 
-            <input id="text" type="submit" value="REGISTER" class="btn btn-dark" onclick="storeData()">
+            <input id="register-btn" type="submit" value="REGISTER" class="btn btn-dark" onclick="storeData()">
         </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
