@@ -1,29 +1,6 @@
 <?php
 session_start();
 include("connection.php");
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-    $department = $_POST["department"];
-    if(!empty($username)&&!empty($password)&&!empty($department))
-    {
-        $sql = "INSERT INTO user_tbl(username, password, department)values('$username','$password','$department')";
-        if($conn->query($sql)===TRUE)
-        {
-            echo '<script>
-            alert ("Added Succesfully!")
-            window.location="index.php"
-            </script>';
-        }
-        else
-        {
-            echo '<script>
-            alert ("Adding Unsuccesful!")
-            window.location="create.php"
-            </script>';
-        }
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -96,10 +73,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <h2>Registration Form</h2>
-        <form method="POST">
+        <form id="register-form">
             <div class="form-group">
                 <label>Username:</label>
-                <input type="text" id="text" name="username" required>
+                <input type="text" id="username" name="username" required>
             </div>
             
             <div class="form-group" id="password-label">
@@ -110,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <div class="form-group">
                 <label>Department:</label>
-                <select id="choices" name="department" required>
+                <select id="department" name="department" required>
                 <option value="DCS">DCS</option>
                 <option value="DTE">DTE</option>
                 <option value="DEE">DEE</option>
@@ -118,9 +95,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <br>
 
-            <input id="text" type="submit" value="REGISTER" class="btn btn-dark" onclick="hashPasswordAndStore()">
+            <input id="text" type="submit" value="REGISTER" class="btn btn-dark" onclick="storeData()">
         </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <script src="scripts.js"></script>
 </body>
 </html>
