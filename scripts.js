@@ -8,7 +8,6 @@ showPasswordCheckbox.addEventListener("change", function () {
         passwordInput.type = "password";
     }
 });
-const passwdInput = document.getElementById("password");
 
 function storeData() {
     var username = document.getElementById("username").value;
