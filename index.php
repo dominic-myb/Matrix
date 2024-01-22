@@ -13,19 +13,22 @@
 <body>
     <div class="container">
 
-        <h2>USER DATA</h2>
-        <label>Filter by Department:</label>
-
-        <select id="dropdown">
-            <option value="All">All Departments</option>
-            <option value="DCS">DCS</option>
-            <option value="DTE">DTE</option>
-            <option value="DEE">DEE</option>
-        </select>
+        <div class="filter-container">
+            <h2>USER DATA</h2>
+            <label for="dropdown">Filter by Department:</label>
+            <select id="dropdown">
+                <option value="All">All Departments</option>
+                <option value="DCS">DCS</option>
+                <option value="DTE">DTE</option>
+                <option value="DEE">DEE</option>
+            </select>
+        </div>
+        
         <div class="search-container">
             <label for="search">Search:</label>
             <input type="text" id="search" placeholder="Search . . .">
         </div>
+        
         <div class="box1">
             <h3>USERS:</h3>
             <a href="create.php" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">Add Users</a>
@@ -74,6 +77,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            // Initial load
+            updateTable();
+
+            // Event handlers
             $("#search").keyup(function(){
                 updateTable();
             });
@@ -82,6 +89,7 @@
                 updateTable();
             });
 
+            // Function to update table based on search and department filter
             function updateTable() {
                 var input = $("#search").val();
                 var department = $("#dropdown").val();
