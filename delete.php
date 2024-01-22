@@ -6,12 +6,12 @@ $result = mysqli_query($conn, $sql);
 if ($result) {
     echo '<script>
             alert ("Deleted Succesfully!")
-            window.location="index.php";
+            window.location="table.php";
         </script>';
 } else {
     echo '<script>
             alert ("Deletion Unsuccesful!")
-            window.location="index.php";
+            window.location="table.php";
         </script>';
 }
 ?>

@@ -9,9 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE user_tbl SET username='$username', password='$password', encrypted_pass='$hashedPassword', department='$department' WHERE id='$id'";
     if ($conn->query($sql) === TRUE) {
         echo "<script>
-        alert ('Update Successfully!')
-        window.location = 'index.php'
+            alert ('Update Successfully!')
+            window.location = 'table.php'
         </script>";
     }
 }
-?>

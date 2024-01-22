@@ -11,7 +11,7 @@ $sql = "INSERT INTO user_tbl (username, password, encrypted_pass, department) VA
 if ($conn->query($sql) === TRUE) {
     echo '<script>
     alert ("Added Succesfully!");
-    window.location="index.php";
+    window.location="table.php";
     </script>';
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
