@@ -14,4 +14,3 @@ if ($result) {
             window.location="table.php";
         </script>';
 }
-?>
