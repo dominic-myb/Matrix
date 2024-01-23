@@ -1,6 +1,4 @@
-<?php
-    include("connection.php");
-?>
+<?php include("connection.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -79,10 +77,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            // Initial load
+
             updateTable();
 
-            // Event handlers
             $("#search").keyup(function(){
                 updateTable();
             });
@@ -91,7 +88,6 @@
                 updateTable();
             });
 
-            // Function to update table based on search and department filter
             function updateTable() {
                 var input = $("#search").val();
                 var department = $("#dropdown").val();
@@ -113,7 +109,6 @@
             }
         });
         $('#home-btn').on('click', function() {
-            // Redirect to the desired PHP file
             window.location.href = 'index.php';
         });
     </script>
