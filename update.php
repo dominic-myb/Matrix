@@ -4,6 +4,34 @@ $id = $_GET['updateid'];
 $query = "SELECT * FROM user_tbl WHERE id='$id'";
 $result = $conn->query($query);
 $row = mysqli_fetch_array($result);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $id = $_GET['updateid'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $hashedPassword = hash('sha256', $password);
+    $department = $_POST['department'];
+
+    $sql = "SELECT * FROM user_tbl WHERE username='$username' AND department='$department' AND id != '$id'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        echo "<script>
+            alert('Username Unavailable!')
+            window.location = 'update.php?updateid=$id'
+        </script>";
+    }else{
+        $sql = "UPDATE user_tbl SET username='$username', password='$password', encrypted_pass='$hashedPassword', department='$department' WHERE id='$id'";
+        if ($conn->query($sql) === TRUE) {
+            echo "<script>
+                alert ('Update Successfully!')
+                window.location = 'table.php'
+            </script>";
+        }else{
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,11 +45,7 @@ $row = mysqli_fetch_array($result);
     <div class="container">
         <br>
         <h2>Update Form</h2>
-        <form id="update-form">
-            <div class="form-group">
-                <input type="hidden" id="id" name="updateid" value="<?php echo $row['id'] ?>">
-            </div>
-
+        <form method="post">
             <div class="form-group">
                 <label>Username:</label>
                 <input type="text" id="username" name="username" value="<?php echo $row['username'] ?>"
@@ -32,6 +56,7 @@ $row = mysqli_fetch_array($result);
                 <label>Password:</label>
                 <input type="password" id="password" name="password" value="<?php echo $row['password'] ?>"
                     autocomplete="off">
+                <input type="checkbox" id="showPassword"><a class="show-password-label">Show Password</a>
             </div>
             <br>
             <div class="form-group">
@@ -43,10 +68,9 @@ $row = mysqli_fetch_array($result);
                 </select>
             </div>
             <br>
-            <input id="update" type="submit" value="UPDATE" class="btn btn-dark" onclick="updateData()">
+            <input id="update" type="submit" value="UPDATE" class="btn btn-dark">
         </form>
     </div>
     <?php include("app/includes/html/html.scripts.php");?>
 </body>
-
 </html>
