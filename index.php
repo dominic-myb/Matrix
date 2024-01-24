@@ -42,27 +42,30 @@ include("app/includes/html/html.head.php");
         <form id="register-form" method="post">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" autocomplete="off" required>
+                <input type="text" class="form-control" id="username" name="username" autocomplete="off" required>
             </div>
             <br>
             <div class="form-group" id="password-label">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" autocomplete="off" required>
-                <input type="checkbox" id="showPassword"><a class="show-password-label">Show Password</a>
+                <input type="password" class="form-control" id="password" name="password" autocomplete="off" required>
+                <br><br><br>
+                <div class="show-hide">
+                    <label for="showPassword" class="form-check-label" style="display: inline-block; float:left; ">Show Password: &nbsp;&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="showPassword" class="form-check-input">
+                </div>
             </div>
             <br>
             <div class="form-group">
-                <label for="department">Department:</label>
-                <select id="department" name="department" required>
+                <label for="department" style="display:inline-block; float:left;">Department: &nbsp;&nbsp;</label>
+                <select id="department" name="department" class="btn btn-secondary btn-sm dropdown-toggle"required>
                 <option value="DCS">DCS</option>
                 <option value="DTE">DTE</option>
                 <option value="DEE">DEE</option>
                 </select>
-            </div>
-            <br>
-            <input id="register-btn" type="submit" value="REGISTER" class="btn btn-dark">
+            </div><br>
+            <input id="register-btn" type="submit" value="Register" class="btn btn-dark" ><br><br>
+            <input id="table-btn" class="btn btn-success" type="button" value="View Table">
             <br><br>
-            <button id="table-btn" type="button">View Table</button>
         </form>
     </div>
     <?php include("app/includes/html/html.scripts.php");?>

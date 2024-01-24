@@ -44,31 +44,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <br>
-        <h2>Update Form</h2>
+        <h2>Update Form</h2><br>
         <form method="post">
             <div class="form-group">
-                <label>Username:</label>
-                <input type="text" id="username" name="username" value="<?php echo $row['username'] ?>"
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" name="username" value="<?php echo $row['username'] ?>"
                     autocomplete="off">
             </div>
-            <br>
+            
             <div class="form-group">
-                <label>Password:</label>
-                <input type="password" id="password" name="password" value="<?php echo $row['password'] ?>"
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" value="<?php echo $row['password'] ?>"
                     autocomplete="off">
-                <input type="checkbox" id="showPassword"><a class="show-password-label">Show Password</a>
+                    <br><br>
+                <div class="show-hide">
+                    <label for="showPassword" class="form-check-label" style="display: inline-block; float:left;">Show Password: &nbsp;&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="showPassword" class="form-check-input">
+                </div>
             </div>
-            <br>
+            
             <div class="form-group">
-                <label>Department:</label>
-                <select id="department" name="department">
+                <label for="department" style="display: inline-block; float:left;">Department: &nbsp;&nbsp;</label>
+                <select id="department" name="department" class="btn btn-secondary btn-sm dropdown-toggle">
                     <option value="DCS" <?php echo ($row['department'] == 'DCS') ? 'selected' : ''; ?>>DCS</option>
                     <option value="DTE" <?php echo ($row['department'] == 'DTE') ? 'selected' : ''; ?>>DTE</option>
                     <option value="DEE" <?php echo ($row['department'] == 'DEE') ? 'selected' : ''; ?>>DEE</option>
                 </select>
             </div>
             <br>
-            <input id="update" type="submit" value="UPDATE" class="btn btn-dark">
+            <input id="update" type="submit" value="UPDATE" class="btn btn-dark"><br><br>
         </form>
     </div>
     <?php include("app/includes/html/html.scripts.php");?>
