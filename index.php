@@ -1,31 +1,60 @@
 <?php
 session_start();
 include("connection.php");
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $department = filter_input(INPUT_POST, 'department', FILTER_SANITIZE_STRING);
+
+    // Validate input
+    if (empty($username) || empty($password) || empty($department)) {
+        echo "<script>
+            alert('Please fill in all fields!')
+            window.location = 'index.php'
+        </script>";
+        exit;
+    }
+
     $hashedPassword = hash('sha256', $password);
-    $department = $_POST['department'];
-    $sql = "SELECT * FROM user_tbl WHERE username='$username' AND department='$department'";
-    $result = $conn->query($sql);
+
+    // Use prepared statements to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM user_tbl WHERE username=? AND department=?");
+    $stmt->bind_param("ss", $username, $department);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
     if ($result->num_rows > 0) {
         echo "<script>
             alert('Username Unavailable!')
             window.location = 'index.php'
         </script>";
-    }else{
-        $sql = "INSERT INTO user_tbl (username, password, encrypted_pass, department) VALUES ('$username', '$password','$hashedPassword', '$department')";
-        if ($conn->query($sql) === TRUE) {
+    } else {
+        // Use prepared statements to prevent SQL injection
+        $stmt = $conn->prepare("INSERT INTO user_tbl (username, password, encrypted_pass, department) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $username, $password, $hashedPassword, $department);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
             echo "<script>
                 alert('Added Successfully!')
                 window.location = 'table.php'
             </script>";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "<script>
+                alert('Error adding user!')
+                window.location = 'index.php'
+            </script>";
         }
+
+        $stmt->close();
     }
+
+    $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

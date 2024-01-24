@@ -1,37 +1,77 @@
 <?php
 include("connection.php");
-$id = $_GET['updateid'];
-$query = "SELECT * FROM user_tbl WHERE id='$id'";
-$result = $conn->query($query);
-$row = mysqli_fetch_array($result);
+
+$id = filter_input(INPUT_GET, 'updateid', FILTER_VALIDATE_INT);
+
+if (!$id) {
+    echo "<script>
+        alert('Invalid ID!')
+        window.location = 'update.php'
+    </script>";
+    exit;
+}
+
+$query = "SELECT * FROM user_tbl WHERE id=?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $department = filter_input(INPUT_POST, 'department', FILTER_SANITIZE_STRING);
 
-    $id = $_GET['updateid'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Validate input
+    if (empty($username) || empty($password) || empty($department)) {
+        echo "<script>
+            alert('Please fill in all fields!')
+            window.location = 'update.php?updateid=$id'
+        </script>";
+        exit;
+    }
+
     $hashedPassword = hash('sha256', $password);
-    $department = $_POST['department'];
 
-    $sql = "SELECT * FROM user_tbl WHERE username='$username' AND department='$department' AND id != '$id'";
-    $result = $conn->query($sql);
+    // Use prepared statements and parameterized queries to prevent SQL injection
+    $sql = "SELECT * FROM user_tbl WHERE username=? AND department=? AND id != ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssi", $username, $department, $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
 
     if ($result->num_rows > 0) {
         echo "<script>
             alert('Username Unavailable!')
             window.location = 'update.php?updateid=$id'
         </script>";
-    }else{
-        $sql = "UPDATE user_tbl SET username='$username', password='$password', encrypted_pass='$hashedPassword', department='$department' WHERE id='$id'";
-        if ($conn->query($sql) === TRUE) {
+    } else {
+        // Use prepared statements and parameterized queries to prevent SQL injection
+        $sql = "UPDATE user_tbl SET username=?, password=?, encrypted_pass=?, department=? WHERE id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssi", $username, $password, $hashedPassword, $department, $id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
             echo "<script>
-                alert ('Update Successfully!')
+                alert('Update Successfully!')
                 window.location = 'table.php'
             </script>";
-        }else{
-            echo "Error: " . $sql . "<br>" . $conn->error;
+        } else {
+            echo "<script>
+                alert('Error updating user!')
+                window.location = 'update.php?updateid=$id'
+            </script>";
         }
+
+        $stmt->close();
     }
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
