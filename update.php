@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     $department = filter_input(INPUT_POST, 'department', FILTER_SANITIZE_STRING);
 
-    // Validate input
     if (empty($username) || empty($password) || empty($department)) {
         echo "<script>
             alert('Please fill in all fields!')
@@ -35,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $hashedPassword = hash('sha256', $password);
 
-    // Use prepared statements and parameterized queries to prevent SQL injection
     $sql = "SELECT * FROM user_tbl WHERE username=? AND department=? AND id != ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssi", $username, $department, $id);
@@ -49,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.location = 'update.php?updateid=$id'
         </script>";
     } else {
-        // Use prepared statements and parameterized queries to prevent SQL injection
+
         $sql = "UPDATE user_tbl SET username=?, password=?, encrypted_pass=?, department=? WHERE id=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssi", $username, $password, $hashedPassword, $department, $id);
@@ -57,13 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->affected_rows > 0) {
             echo "<script>
-                alert('Update Successfully!')
+                alert('Updated Successfully!')
                 window.location = 'table.php'
             </script>";
         } else {
             echo "<script>
-                alert('Error updating user!')
-                window.location = 'update.php?updateid=$id'
+                alert('Nothing is Changed!')
+                window.location = 'table.php';
             </script>";
         }
 
